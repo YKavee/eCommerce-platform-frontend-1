@@ -4,6 +4,7 @@ import { Products } from "./Products";
 import { auth, fs } from "../Config/Config";
 import { IndividualFilteredProduct } from "./IndividualFilteredProduct";
 import axios from "axios";
+import { getAllProducts } from "../services/product-management/product-management-service";
 
 export const Home = (props) => {
   const uid = GetCurrentUser();
@@ -28,16 +29,14 @@ export const Home = (props) => {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
 
-  // getting products function
-  const getProducts = async () => {
-    axios.get(`http://localhost:3000/food-ordering/v1/products`).then((res) => {
-      const productList = res.data;
-      setProducts(productList);
-    });
-  };
+  // fetch all product details
+  async function fetchAllProducts() {
+    const productList = await getAllProducts();
+    setProducts(productList);
+  }
 
   useEffect(() => {
-    getProducts();
+    fetchAllProducts();
   }, []);
 
   // state of totalProducts
